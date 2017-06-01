@@ -6,7 +6,8 @@ import subprocess
 
 ec = boto3.resource('ec2')
 
-instances = ec.instances.filter(Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
+#instances = ec.instances.filter(Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
+instances = ec.instances.filter(Filters=[{'Name': 'tag-key', 'Values': ['Name']}])
 
 aws_nodes = []
 
@@ -19,6 +20,10 @@ print(len(aws_nodes))
 
 chef_nodes = subprocess.check_output(["knife", "node", "list"]).split()
 print(len(chef_nodes))
+
+for node in chef_nodes:
+    if node not in aws_nodes:
+        print(node)
 
 
 
